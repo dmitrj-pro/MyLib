@@ -1,0 +1,7 @@
+#TARGET: Project
+
+.PHONY: QT
+
+QT:
+	( cat ./build/p1.txt && echo 'INCLUDEPATH+='$(DPLibInclude) && echo 'LIBS+='$(DPLibLib) && echo 'LIBS+='$(DPCryptLib) &&  cat ./build/p2.txt ) > google.pro
+	#( echo '#include "conf.h"' && echo '' && printf 'String __hashe_version = "'$(SnifVersion)'";' && echo '' && printf 'String __date_version = "$(SnifDate)";') > version.cpp

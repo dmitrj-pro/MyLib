@@ -1,0 +1,7 @@
+Language=Rus
+Autor=Diman Pro
+[.Lib]
+nr=NewLine
+os=Linux
+[.Lib.Parse]
+Core=Metal

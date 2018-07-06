@@ -1,0 +1,10 @@
+
+SOURCES += qgoogleauth.cpp \
+    base32.cpp \
+    hmac.cpp \
+    google.cpp
+
+HEADERS += qgoogleauth.h\
+        qgoogleauth_global.h \
+    base32.h \
+    hmac.h

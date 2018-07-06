@@ -1,33 +1,62 @@
-/*
- * log.h
- *
- *  Created on: 11 июн. 2017 г.
- *      Author: diman-pro
- */
+#ifndef LOG_H
+#define LOG_H
 
-#ifndef LIB_LOG_LOG_H_
-#define LIB_LOG_LOG_H_
-
-#include <fstream>
-
-#define FILE std::ofstream
-
+#include "../DPLib.conf.h"
 
 namespace DP{
+	template <typename Ostream>
 	class Log{
 		private:
-			FILE f;
+			#ifdef DP_DEBUG
+				Ostream & os;
+			#endif
 		public:
-			Log(){}
-			Log(char* File);
-			bool Open(const char*&File);
-			void write(char* Word);
-			void writeln(char* Word);
-			~Log();
-			void close();
+			#ifdef DP_DEBUG
+				inline Log(Ostream&os):os(os){}
+			#endif
+			#ifndef DP_DEBUG
+				inline Log(Ostream & os){}
+				inline Log(){}
+			#endif
+			template<typename T>
+			inline Log& operator()(const T& t){
+				#ifdef DP_DEBUG
+					os << t << " ";
+					os.flush();
+				#endif
+				return *this;
+			}
+			inline void flush(){
+				#ifdef DP_DEBUG
+					os.flush();
+				#endif
+			}
+
+			template<typename T>
+			inline Log& operator*(const T& t){
+				this->operator ()(t);
+				this->operator ()("\n");
+				return *this;
+			}
+
+			template<typename T>
+			inline Log& endl(const T& t){
+				(*this)*t;
+				return *this;
+			}
+			inline Log& endl(){
+				(*this)*"";
+				return *this;
+			}
+
+			template <typename T>
+			friend Log& operator << (Log& os, const T& x){
+				return os(x);
+			}
 
 	};
+
+	extern Log<Ostream> log;
+	extern bool isError;
 }
-
-
-#endif /* LIB_LOG_LOG_H_ */
+#endif // LOG_H
