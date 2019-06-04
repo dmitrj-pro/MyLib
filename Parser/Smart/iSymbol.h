@@ -2,7 +2,7 @@
 #define ISYMBOL_H_
 #include "../../DPLib.conf.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	class iSymbol{
 		public:
 			virtual ~iSymbol(){}

@@ -1,6 +1,6 @@
 #include "Setting.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	void Setting::Clear(){
 		for (auto x=_node.begin();x!=_node.end();x++)
 			mem.erase(x->second);
@@ -9,15 +9,23 @@ namespace DP{
 	}
 	Setting::MyPair Setting::parseKey(const String & key)const{
 		DP::SmartParser par("${first}.${last}");
-		MyPair res("",nullptr);
+		SmartParser par2 (".${last}");
+		MyPair res("", nullptr);
+
 		if (par.Scan(key)){
 			res.first=par.GetParam("first");
 			res.second=new String(par.GetParam("last"));
 			return res;
-		} else {
-			res.first=key;
+		}
+
+		if (par2.Scan(key)){
+			res.first = "";
+			res.second = new String (par2.GetParam("last"));
 			return res;
 		}
+
+		res.first=key;
+		return res;
 	}
 	void Setting::add(const String&key, const String&value){
 		MyPair map=parseKey(key);
@@ -29,7 +37,7 @@ namespace DP{
 			}
 		} else {
 			if (!DP::ConteinsKey(_node,map.first))
-				_node[map.first]=&mem.getMem<Setting>();
+				_node[map.first] = &mem.getMem<Setting>();
 			_node[map.first]->add(*(map.second),value);
 		}
 	}

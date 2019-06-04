@@ -10,7 +10,7 @@
 
 #include "../../iKeyGen.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	namespace Collection{
 		namespace Ver1{
 			class Key:public iKey{

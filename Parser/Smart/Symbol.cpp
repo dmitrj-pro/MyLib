@@ -1,8 +1,10 @@
 #include "Symbol.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	String Symbol::ToString()const{
-		return str+"";
+		String res = "";
+		res += str;
+		return res;
 	}
 }
 

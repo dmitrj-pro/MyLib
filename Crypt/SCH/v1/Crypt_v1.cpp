@@ -9,10 +9,11 @@
 #include "UniKey_v1.h"
 #include "../System.h"
 #include "../../../Log/Log.h"
+#include "../../../Types/Exception.h"
 #include "../../../Converter/Converter.h"
 
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	namespace Collection{
 		namespace Ver1{
 			Crypt::Crypt(const String &key):_key(Key(key)){
@@ -52,17 +53,15 @@ namespace DP{
 				for (auto t = map.begin(); t != map.end(); t++) {
 					auto tmo = k();
 					map[t->first] = tmo;
-					res.push_back(DP::Sys::convert->ord(t->first));
+					res.push_back(__DP_LIB_NAMESPACE__::Sys::convert->ord(t->first));
 				}
 				res.push_back(0);
 				for (UInt i = 0; i < str.length(); i++)
 					res.push_back(map[str[i]]);
-
 				log << "Enc Step 1:";
 				for (auto x = res.cbegin(); x != res.cend(); x++)
 					log << *x;
 				log.endl();
-
 				return res;
 			}
 
@@ -75,7 +74,7 @@ namespace DP{
 				Key ktmp{__key};
 				UniKey k {1, i, ktmp};
 				for (UInt j = 0; j < i; j++)
-					map[k()] = DP::Sys::convert->sym(tmp[j]);
+					map[k()] = Sys::convert->sym(tmp[j]);
 				String res = "";
 				for (UInt j = i + 1; j < tmp.size(); j++) {
 					if (tmp[j] == 0)
@@ -92,7 +91,7 @@ namespace DP{
 			Int Crypt::Step3_Get_Key(){
 				Int res=1;
 				for (UInt i = 0; i < __key.length(); i++)
-					res *= DP::Sys::convert->ord(__key[i]);
+					res *= Sys::convert->ord(__key[i]);
 				return res;
 			}
 
@@ -198,7 +197,7 @@ namespace DP{
 				log.endl();
 				return l;
 			}
-	
+
 			Crypt::LocalVector Crypt::DEC_Step4(LocalVector  l){
 				log << "DEC Step 4:";
 				for (auto x = l.cbegin(); x != l.cend(); x++)
@@ -220,11 +219,11 @@ namespace DP{
 			}
 
 			String Crypt::ENC_Step5(const LocalVector& l){
-				String res = DP::Sys::convert->ToHex(ToByte(_map_C)[0]);
+				String res = Sys::convert->ToHex(ToByte(_map_C)[0]);
 				for (UInt i = 0; i < l.size(); i++) {
 					Int* t = ToByte(l[i]);
 					for (UInt j = 0; j < sizeof(l[i]); j++)
-						res += DP::Sys::convert->ToHex(t[j]);
+						res += Sys::convert->ToHex(t[j]);
 
 					delete [] t;
 				}
@@ -235,17 +234,16 @@ namespace DP{
 				LocalVector res;
 				String tmp {str[0]};
 				tmp += str[1];
-				_map_C = DP::Sys::convert->HexToByte(tmp);
+				_map_C = __DP_LIB_NAMESPACE__::Sys::convert->HexToByte(tmp);
 				Int k = 0;
 				Int ras = (str.size() - 2) / 2;
 				if (ras % 4 != 0)
-					//ToDo
-					throw;
+					throw EXCEPTION("Critycal error. Bytes != 0 (mod 4)");
 				Int bs[ras];
 				for (UInt i = 2; i < str.length(); i+=2) {
 					String tmps{str[i]};
 					tmps += str[i + 1];
-					bs[k++] = DP::Sys::convert->HexToByte(tmps);
+					bs[k++] = Sys::convert->HexToByte(tmps);
 				}
 				for (Int i = 0; i < ras; i+=4)
 					res.push_back(ToInt(bs+i));

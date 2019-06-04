@@ -13,16 +13,16 @@
 #include "Key_v1.h"
 
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	namespace Collection{
 		namespace Ver1{
-			class Crypt: public DP::iCrypt{
+			class Crypt: public __DP_LIB_NAMESPACE__::iCrypt{
 				private:
 					Key _key;
 					String __key;
 					UInt _map_C = 0;
 					typedef Vector<Int> LocalVector;
-	
+
 				public:
 					Crypt(const String &key);
 					virtual String Enc(const String & text);
@@ -41,7 +41,7 @@ namespace DP{
 					LocalVector DEC_Step4(LocalVector l);
 					String ENC_Step5(const LocalVector& l);
 					LocalVector DEC_Step5(const String &str);
-	
+
 			};
 		}
 	}

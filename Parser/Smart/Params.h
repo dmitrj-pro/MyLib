@@ -3,7 +3,7 @@
 
 #include "iSymbol.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	class Params:public iSymbol{
 		private:
 			String str;

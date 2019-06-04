@@ -1,7 +1,7 @@
 #include "SmartParser.h"
 #include "Smart/Exception.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	SmartParser::SmartParser(const String&str){
 		bool name = false;
 		String tmp;
@@ -27,16 +27,22 @@ namespace DP{
 		}
 	}
 
+	SmartParser::~SmartParser(){
+		for (auto x = sym.begin(); x!=sym.end(); x++){
+			memory.erase(*x);
+		}
+	}
+
 	String SmartParser::ToString()const{
 		String str = "";
-		for (int i = 0; i < sym.size(); i++)
-			str += sym [i]->ToString ();
+		for (auto x  = sym.cbegin(); x != sym.cend(); x++)
+			str += (*x)->ToString ();
 		return str;
 	}
 
 	String SmartParser::GetParam(const String &str)const throw (DP::ParamsNotFound){
-		for (int i=0; i < sym.size(); i++){
-			Params* tmp = dynamic_cast<Params*>(sym[i]);
+		for (auto x  = sym.cbegin(); x != sym.cend(); x++) {
+			Params* tmp = dynamic_cast<Params*>(*x);
 			if (tmp == nullptr)
 				continue;
 			if (tmp->Name() == str)
@@ -50,8 +56,10 @@ namespace DP{
 			Params* tmp = dynamic_cast<Params*>(sym[i]);
 			if (tmp == nullptr)
 				continue;
-			if (tmp->Name() == param)
+			if (tmp->Name() == param) {
 				tmp->Value() = value;
+				return;
+			}
 		}
 		throw DP::ParamsNotFound(param);
 	}
@@ -109,8 +117,17 @@ namespace DP{
 				return true;
 			}
 			if (ListIterator == (list.size()-1) && (!isSymbol(list [ListIterator]))){
+				SmartParser::Params* par=(SmartParser::Params*)list [ListIterator];
+				if (par->Value().size() == 0)
+					return false;
 				sym = list;
 				return true;
+			} else {
+				SmartParser::Symbol* symb=(SmartParser::Symbol*)list [ListIterator];
+				if (symb->Value() == '*'){
+					sym = list;
+					return true;
+				}
 			}
 			return false;
 		}
@@ -124,6 +141,9 @@ namespace DP{
 					return t;
 			}
 			if (sym->Value() == '*') {
+				if ((ListIterator + 1) >= list.size()){
+					return true;
+				}
 				for (int i = StringIterator; i < str.length(); i++) {
 					bool t = StartScan (str, i, list, ListIterator + 1);
 					if (t)
@@ -135,11 +155,15 @@ namespace DP{
 			SmartParser::Params* par=(SmartParser::Params*)list [ListIterator];
 			if ((ListIterator + 1) == list.size()) {
 				par->SetValue(str.substr(StringIterator));
+				if (par->Value().size() == 0)
+					return false;
 				sym = list;
 				return true;
 			}
 			String tmp = "";
-			for (int i = StringIterator; i < str.length(); i++) {
+			// Params.size > 0
+			tmp += str[StringIterator];
+			for (int i = StringIterator + 1; i < str.length(); i++) {
 				if (!isSymbol(list [ListIterator+1]))
 					throw DP::PharserFailure("Unexpected parameter");
 				SmartParser::Symbol* sym=(SmartParser::Symbol*)list [ListIterator+1];

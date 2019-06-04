@@ -4,15 +4,15 @@
 #include "iSymbol.h"
 #include "../../Types/Exception.h"
 
-namespace DP{
-	class ParamsNotFound:public Exception{
+namespace __DP_LIB_NAMESPACE__{
+    class ParamsNotFound:public LineException{
 		public:
-			ParamsNotFound(const String& str):Exception(str){}
+            ParamsNotFound(const String& str):LineException(str, __LINE__, __FILE__){}
 	};
 
-	class PharserFailure:public Exception{
+    class PharserFailure:public LineException{
 		public:
-			PharserFailure(const String& str):Exception(str){}
+            PharserFailure(const String& str):LineException(str, __LINE__, __FILE__){}
 	};
 }
 

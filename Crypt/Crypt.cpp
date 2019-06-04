@@ -10,11 +10,12 @@
 #include "../DPLib.conf.h"
 #include "Crypt.h"
 #include "iCrypt.h"
+#include "../Types/Exception.h"
 
 #include "SCH/v1/Crypt_v1.h"
 
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	//Global
 	Map<Int, String> table_crypt;
 	Map<Int, iCrypt*> ListCrypt;
@@ -24,18 +25,18 @@ namespace DP{
 		for (auto x = table_crypt.begin(); x != table_crypt.end(); x++)
 			if (x->second==name)
 				return x->first;
-		return -1;
+		throw EXCEPTION("Types crypt is not found");
 	}
 
 	String NameCrypt(Int id){
 		for (auto x = table_crypt.begin(); x != table_crypt.end(); x++)
 			if (x->first == id)
 				return x->second;
-		return "-1";
+		throw EXCEPTION("Types crypt is not found");
 	}
 
 	void AddCrypt(iCrypt&cr, const String & name) {
- 		auto n = table_crypt.size();
+		auto n = table_crypt.size();
 		table_crypt[n] = name;
 		ListCrypt[n] = &cr;
 	}
@@ -50,7 +51,7 @@ namespace DP{
 	}
 
 	void load_table(){
-		iCrypt * cr = new DP::Collection::Ver1::Crypt("");
+	iCrypt * cr = new __DP_LIB_NAMESPACE__::Collection::Ver1::Crypt("");
 		AddCrypt(*cr, "SCH5");
 	}
 
@@ -80,6 +81,8 @@ namespace DP{
 				break;
 			str += text[i];
 		}
+		if ( i >= text.size())
+			i=-1;
 		iCrypt * cr;
 		if (str == "" || str == text)
 			cr = &getCryptfromId(0);

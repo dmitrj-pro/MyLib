@@ -7,7 +7,7 @@
 
 #include "UniKey_v1.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	namespace Collection{
 		namespace Ver1{
 			UniKey::UniKey(Int start, Size_t N, Key&k):_key(k){

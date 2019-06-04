@@ -2,20 +2,16 @@
 #define MEMORYMANAGER_MEMORY_H_
 
 #define __CPP__
+
 #include "../DPLib.conf.h"
+#include "Exception.h"
 #include <cstdlib>
-
-
-//Включение логов
-//#define Logue
-
-#ifdef Logue
-#include "../ProcessManager/MultiThreadOut.h"
-using Proces_MNG::console;
+#ifdef DP_LIB_DEBUG
+#include <Log/Log.h>
 #endif
 
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	/*
 	 * Данный класс выделяет динамическую память и контролирует ее возвращение ОС
 	 */
@@ -23,25 +19,15 @@ namespace DP{
 		private:
 			Vector<void*> _mem;
 		public:
-			MemoryManager(){}
+			inline MemoryManager(){}
 
-			~MemoryManager(){
-				/*
-				 * Если кто-то не возвратил память, то возвращаем ее принудительно
-				 */
-				for (auto x = _mem.begin(); x != _mem.end(); x++){
-					free(*x);
-				}
-				#ifdef Logue
-					console<<"\ndelete "<<_mem.size()<<"\n";
-				#endif
-			}
+			~MemoryManager();
 
 			/*
 			 * Получаем объект произвольного типа,для которого определен конструктор
 			 */
 			template<typename T>
-			T& getMem(){
+			inline T& getMem(){
 				void* memory = std::malloc(sizeof(T));
 				T* res = new (memory)T();
 				_mem.push_back(memory);
@@ -49,7 +35,7 @@ namespace DP{
 			}
 
 			template <typename T, typename... Y>
-			T& getMem(Y... __args){
+			inline T& getMem(Y... __args){
 				void* memory = std::malloc(sizeof(T));
 				T* res = new (memory)T(__args...);
 				_mem.push_back(memory);
@@ -65,8 +51,9 @@ namespace DP{
 				x.~T();
 				for (auto x = _mem.begin(); x != _mem.end(); x++)
 					if (*x==mem){
-						#ifdef Logue
-							Proces_MNG::console<<"\nDelete memory"<<mem<<"\n";
+						#ifdef DP_LIB_DEBUG
+							log << "Delete memory " << mem;
+							log.endl();
 						#endif
 						_mem.erase(x);
 						free( mem);
@@ -83,8 +70,9 @@ namespace DP{
 				x->~T();
 				for (auto x = _mem.begin(); x != _mem.end(); x++)
 					if (*x==mem){
-						#ifdef Logue
-							Proces_MNG::console<<"\nDelete memory"<<mem<<"\n";
+						#ifdef DP_LIB_DEBUG
+							log << "Delete memory " << mem;
+							log.endl();
 						#endif
 						_mem.erase(x);
 						free( mem);
@@ -96,17 +84,7 @@ namespace DP{
 			 * Очищаем память в добровольном порядке, но без
 			 * вызова диструктора
 			 */
-			void erase(void * mem){
-				for (auto x = _mem.begin(); x != _mem.end(); x++)
-					if (*x == mem){
-						#ifdef Logue
-							Proces_MNG::console<<"\nDelete memory"<<mem<<"\n";
-						#endif
-						_mem.erase(x);
-						free(mem);
-						return;
-					}
-			}
+			void erase(void * mem);
 	};
 }
 

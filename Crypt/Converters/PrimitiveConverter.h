@@ -11,7 +11,7 @@
 
 #include "../iConverter.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	namespace Converter{
 		class Primitive:public iConverter{
 			public:

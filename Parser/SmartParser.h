@@ -1,13 +1,15 @@
 #ifndef SCANER_SCANER_H_
 #define SCANER_SCANER_H_
 
+#define __CPP__
+#include "../DPLib.conf.h"
 #include "../Types/MemoryManager.h"
 #include "Smart/iSymbol.h"
 #include "Smart/Symbol.h"
 #include "Smart/Params.h"
 #include "Smart/Exception.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	class SmartParser{
 		public:
 			typedef DP::iSymbol ISymbol;
@@ -23,11 +25,7 @@ namespace DP{
 			bool StartScan(const String &str, int si, Vect &list,int li) throw (DP::PharserFailure);
 
 		public:
-			~SmartParser(){
-				for (auto x = sym.begin(); x!=sym.end(); x++){
-					memory.erase(*x);
-				}
-			}
+			~SmartParser();
 			SmartParser(const String&str);
 			String ToString()const;
 			String GetParam(const String &str)const throw (DP::ParamsNotFound);

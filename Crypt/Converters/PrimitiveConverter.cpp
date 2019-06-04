@@ -8,16 +8,18 @@
 #include "PrimitiveConverter.h"
 #include "../../DPLib.conf.h"
 #include "../../Converter/Converter.h"
+#include "../../Types/Exception.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	namespace Converter{
-
 		Int Primitive::ord(UChar c){
 			return (Int)c;
 		}
 
-		Char ByteToHex(Int b){
-			b = b<0 ? (-1)*b : b;
+		inline Char ByteToHex(Int b){
+			if (b < 0)
+				throw EXCEPTION("b < 0");
+			//b = b<0 ? (-1)*b : b;
 			if ( (b >= 0) && (b < 10) )
 				return (char) ('0' + b);
 			switch (b) {
@@ -44,10 +46,10 @@ namespace DP{
 		}
 
 		String Primitive::ToHex(Int b){
-			return toStringWithNull(ByteToHex(b/16)) + toString(ByteToHex(b%16));
+			return toString(ByteToHex(b/16)) + toString(ByteToHex(b%16));
 		}
 
-		Int HexToInt(Char c) {
+		inline Int HexToInt(Char c) {
 			if ( (c <= '9') && (c >= '0') )
 				return (Int) (c - '0');
 			switch (c) {

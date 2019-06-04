@@ -10,7 +10,9 @@ SRCPPS =  ./Log/stlog.cpp \
 	Parser/SmartParser.cpp \
 	Parser/Smart/Params.cpp \
 	Parser/Smart/Symbol.cpp \
-	Parser/Setting.cpp
+	Parser/Setting.cpp \
+	Types/MemoryManager.cpp \
+	Converter/Converter.cpp
 SRCS = 
 CXXFLAGS = -std=c++11 -fpic
 OBJS = $(SRCPPS:.cpp=.o) $(SRCS:.c=.o)
@@ -25,7 +27,7 @@ build: $(OBJS)
 	$(AR) rc libdp.a $(OBJS)
 
 clear:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) version.cpp
 
 clean: clear
 	echo Ok
@@ -45,3 +47,5 @@ install_local: clear
 	$(RM) -rf Example
 	$(RM) -rf Debug
 	$(RM) Makefile
+	$(RM) init_example.sh
+	$(RM) -rf TEST

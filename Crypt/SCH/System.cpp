@@ -9,9 +9,9 @@
 #include "System.h"
 #include "../Converters/PrimitiveConverter.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__ {
 	namespace Sys{
-		iConverter* convert = new DP::Converter::Primitive();
+		iConverter* convert = new __DP_LIB_NAMESPACE__::Converter::Primitive();
 	}
 }
 

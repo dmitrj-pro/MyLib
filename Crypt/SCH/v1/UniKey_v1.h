@@ -12,7 +12,7 @@
 #include "Key_v1.h"
 
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	namespace Collection{
 		namespace Ver1{
 			class UniKey{

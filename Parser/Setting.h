@@ -5,10 +5,11 @@
 #include "../DPLib.conf.h"
 #include "SmartParser.h"
 #include "../Converter/Converter.h"
+#include "../Types/Exception.h"
 
 
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	class Setting{
 		private:
 			typedef Pair<String, String*> MyPair;
@@ -32,6 +33,7 @@ namespace DP{
 				}
 				return os;
 			}
+
 			template<typename Cin>
 			Cin& cin(Cin& os){
 				DP::SmartParser Value{"${name}=${value}"};
@@ -55,22 +57,33 @@ namespace DP{
 			}
 		public:
 			Setting():links(*(new int(0))){}
+
 			Setting(const Setting& s):_data(s._data), links(s.links),_node(s._node){ links++; }
 
 			bool Conteins(const String& key);
+
 			void Clear();
+
 			inline ~Setting(){
 				links--;
 				if (links == 0)
 					Clear();
 			}
 			String get(const String& key);
+
 			void add(const String&key, const String&value);
+
 			template<typename Vect>
-			Vect getKeys(const String&key=""){
+			Vect getKeys(const String & key=""){
 				MyPair map=parseKey(key);
-				if (map.second==nullptr){
-					if (DP::ConteinsKey(_node,key)){
+				if (map.second == nullptr){
+					if (map.first == "."){
+						Vect res;
+						for (auto x = _data.begin(); x != _data.end(); x++)
+							res.push_back((*x).first);
+						return res;
+					}
+					if (DP::ConteinsKey(_node, key)){
 						Vect res;
 						for (auto x=_node[key]->_data.begin(); x!=_node[key]->_data.end(); x++)
 							res.push_back((*x).first);
@@ -80,11 +93,18 @@ namespace DP{
 				} else 
 					return _node[map.first]->getKeys<Vect>(*(map.second));
 			}
+
 			template<typename Vect>
 			Vect getFolders(const String&key=""){
 				MyPair map=parseKey(key);
 				if (map.second==nullptr){
-					if (DP::ConteinsKey(_node,key)){
+					if (map.first == "."){
+						Vect res;
+						for (auto x = _node.begin(); x != _node.end(); x++)
+							res.push_back((*x).first);
+						return res;
+					}
+					if (DP::ConteinsKey(_node, key)){
 						Vect res;
 						for (auto x = _node[key]->_node.begin(); x != _node[key]->_node.end(); x++)
 							res.push_back((*x).first);
@@ -94,11 +114,13 @@ namespace DP{
 				} else 
 					return _node[map.first]->getFolders<Vect>(*(map.second));
 			}
+
 			template <typename OSTream>
 			inline friend Ostream& operator<<(OSTream&os, const Setting& s){
 				String str="";
 				return s.cout(os,str);
 			}
+
 			template <typename ISTream>
 			inline friend ISTream& operator*(ISTream&os, Setting&set){
 				set.cin(os);

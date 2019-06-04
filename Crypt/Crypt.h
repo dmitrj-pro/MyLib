@@ -10,7 +10,7 @@
 
 #include "iCrypt.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	class Crypt:public iCrypt{
 		private:
 			String key;
@@ -20,7 +20,7 @@ namespace DP{
 			Crypt(const String&key, const String &name);
 			virtual String Enc(const String &test);
 			virtual String Dec(const String &text);
-			virtual void SetKey(const String&key){
+			virtual inline void SetKey(const String&key){
 				this->key=key;
 			}
 	};

@@ -1,6 +1,6 @@
 #include "DPLib.conf.h"
 
-namespace DP{
-	String __hashe_version = "8dfdee2";
-	String __date_version = "2018-03-01 18:02:27";
+namespace __DP_LIB_NAMESPACE__{
+	String __hashe_version = "adf60d1";
+	String __date_version = "2018-03-06 14:44:33 +0300";
 }

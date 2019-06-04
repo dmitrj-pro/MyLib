@@ -3,7 +3,7 @@
 
 #include "../DPLib.conf.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	template <typename Ostream>
 	class Log{
 		private:
@@ -34,8 +34,10 @@ namespace DP{
 
 			template<typename T>
 			inline Log& operator*(const T& t){
-				this->operator ()(t);
-				this->operator ()("\n");
+				#ifdef DP_DEBUG
+					os << t;
+					os << "\n";
+				#endif
 				return *this;
 			}
 
@@ -50,7 +52,7 @@ namespace DP{
 			}
 
 			template <typename T>
-			friend Log& operator << (Log& os, const T& x){
+			friend inline Log& operator << (Log& os, const T& x){
 				return os(x);
 			}
 

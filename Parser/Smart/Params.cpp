@@ -1,8 +1,8 @@
 #include "Params.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	String Params::ToString()const{
-		return str + " {" + _value + "} ";
+		return _value;
 	}
 	String Params::Value()const{
 		return _value;

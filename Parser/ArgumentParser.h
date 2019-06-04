@@ -5,7 +5,7 @@
 #include "../DPLib.conf.h"
 #include "../Converter/Converter.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 
 	class ArgumentParser;
 	typedef void (* function)(ArgumentParser&, int&, Vector<String>&);
@@ -16,7 +16,10 @@ namespace DP{
 			Map<String, function> _all;
 
 		public:
-			void Add (const String& name, function F);
+			inline void Add (const String& name, function F){
+				Map<String, function>& tmp = _all;
+				tmp[name]=F;
+			}
 
 			inline void Push(const String & name, const Vector<String>& value){ _par[name] = value; }
 			inline Vector<String> Get(const String & name) {return _par[name]; }

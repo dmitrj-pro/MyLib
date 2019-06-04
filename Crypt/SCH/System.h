@@ -10,7 +10,7 @@
 
 #include "../iConverter.h"
 
-namespace DP{
+namespace __DP_LIB_NAMESPACE__{
 	namespace Sys{
 		extern iConverter * convert;
 	}
